@@ -1,9 +1,133 @@
 <html>
-    <head>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/3.0.0-rc.5/web3.min.js" integrity="sha512-jRzb6jM5wynT5UHyMW2+SD+yLsYPEU5uftImpzOcVTdu1J7VsynVmiuFTsitsoL5PJVQi+OtWbrpWq/I+kkF4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js" integrity="sha512-894YE6QWD5I59HgZOGReFYm4dnWc1Qt5NtvYSaNcOP+u1T9qYdvdihz0PPSiiqn/+/3e7Jo4EaG7TubfWGUrMQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    </head>
-    <body>
-        <h1>hello</h1>
-    </body>
+
+<head>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/web3/3.0.0-rc.5/web3.min.js"
+    integrity="sha512-jRzb6jM5wynT5UHyMW2+SD+yLsYPEU5uftImpzOcVTdu1J7VsynVmiuFTsitsoL5PJVQi+OtWbrpWq/I+kkF4Q=="
+    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body style="padding: 100px 200px;">
+  <form>
+    <div class="form-group">
+      <label for="wallet-input">Input Wallet Address</label>
+      <textarea class="form-control" id="wallet-input" rows="30"></textarea>
+    </div>
+    <button id="check-balance-btn" type="button" class="btn btn-primary">CHECK NOW</button>
+  </form>
+</body>
+<script>
+  let web3 = new Web3('https://bsc-dataseed1.binance.org:443');
+
+  const XWG_ABI = [{ "constant": true, "inputs": [], "name": "name", "outputs": [{ "name": "", "type": "string" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_spender", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "approve", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "totalSupply", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_from", "type": "address" }, { "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transferFrom", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "decimals", "outputs": [{ "name": "", "type": "uint8" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "amount", "type": "uint256" }], "name": "withdrawEther", "outputs": [], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_value", "type": "uint256" }], "name": "burn", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_value", "type": "uint256" }], "name": "unfreeze", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "balanceOf", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "owner", "outputs": [{ "name": "", "type": "address" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [], "name": "symbol", "outputs": [{ "name": "", "type": "string" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_to", "type": "address" }, { "name": "_value", "type": "uint256" }], "name": "transfer", "outputs": [], "payable": false, "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }], "name": "freezeOf", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "type": "function" }, { "constant": false, "inputs": [{ "name": "_value", "type": "uint256" }], "name": "freeze", "outputs": [{ "name": "success", "type": "bool" }], "payable": false, "type": "function" }, { "constant": true, "inputs": [{ "name": "", "type": "address" }, { "name": "", "type": "address" }], "name": "allowance", "outputs": [{ "name": "", "type": "uint256" }], "payable": false, "type": "function" }, { "inputs": [{ "name": "initialSupply", "type": "uint256" }, { "name": "tokenName", "type": "string" }, { "name": "decimalUnits", "type": "uint8" }, { "name": "tokenSymbol", "type": "string" }], "payable": false, "type": "constructor" }, { "payable": true, "type": "fallback" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": true, "name": "to", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Transfer", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Burn", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Freeze", "type": "event" }, { "anonymous": false, "inputs": [{ "indexed": true, "name": "from", "type": "address" }, { "indexed": false, "name": "value", "type": "uint256" }], "name": "Unfreeze", "type": "event" }]
+
+  let XWG_Constract = null
+
+  async function initXwgContract() {
+    for (let i = 0; i < 3; i++) {
+      try {
+        XWG_Constract = new web3.eth.Contract(XWG_ABI, '0x6b23c89196deb721e6fd9726e6c76e4810a464bc');
+        return
+      } catch (e) {
+        await sleep(1)
+      }
+    }
+  }
+  initXwgContract()
+
+  async function getXwg(address) {
+    try {
+      let balance = await XWG_Constract.methods.balanceOf(address).call();
+      return Number(web3.utils.fromWei(balance))
+    } catch (e) {
+      console.log('[DEBUG] e', e)
+      return -1
+    }
+  }
+  async function getBnb(address) {
+    try {
+      let balance = await web3.eth.getBalance(address)
+      return Number(web3.utils.fromWei(balance))
+    } catch (e) {
+      console.log('[DEBUG] e', e)
+      return -1
+    }
+  }
+
+  async function checkWallet(item) {
+    if (!item) return item
+    item.bnb = await getBnb(item.address)
+    item.xwg = await getXwg(item.address)
+    return item
+  }
+
+  async function sleep (ms) {
+    return new Promise(S => setTimeout(() => S(), ms));
+  };
+
+  $(function () {
+    $(document).on("click", "#check-balance-btn", async () => {
+      let text = $("#wallet-input").val();
+      if (!text) return
+      document.querySelector('#check-balance-btn').disabled = true
+      let delimiter = text.includes('\t') ? '\t' : '|'
+      let counter = 0
+      let items = text.split('\n').map(l => {
+        let x = l.replace(new RegExp('\t'), '|')
+        let [address,] = x.split('|')
+        if (!address.startsWith('0x')) {
+          let arr = x.split('|')
+          address = arr.find(x => x.startsWith('0x')) || address
+        }
+        if (!address) return null
+        return {
+          address: address.trim(), org: l, i: ++counter
+        }
+      }).filter(x => x)
+
+      let txtArea = []
+      $("#wallet-input").val('')
+      let finalResult = [...items]
+      let thread = 13
+      // eslint-disable-next-line no-constant-condition
+      while (true) {
+        if (thread <= 0) {
+          await sleep(1)
+          continue
+        }
+        let it = items.shift()
+        if (!it) {
+          if (thread < 13) {
+            await sleep(1)
+            continue
+          } else {
+            break
+          }
+        }
+        thread--
+        checkWallet(it).then(res => {
+          txtArea.push(`${res.address}|${res.xwg}|${res.bnb}`)
+          $("#wallet-input").val(txtArea.join('\n'))
+          thread++
+        })
+        await sleep(30, 50)
+      }
+      await sleep(1)
+      finalResult = finalResult.sort((a, b) => a.i - b.i)
+      $("#wallet-input").val(finalResult.map(x => `${x.org}${delimiter}${x.xwg}${delimiter}${x.bnb}`).join('\n'))
+      document.querySelector('#check-balance-btn').disabled = false
+    });
+  });
+</script>
+
 </html>
